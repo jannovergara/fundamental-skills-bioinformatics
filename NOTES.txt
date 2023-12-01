@@ -1,0 +1,77 @@
+Programming - instruct computer to perform tasks
+Why? Because computers are fast and cheap and run 24hrs.
+Follows a pre-defined logic and syntax, highly detailed and precise
+
+R
+- designed by Ross Ihaka and Robert Gentleman
+- designed for statistical analysis
+- running as without a compiler
+- open-source; GNU Public License
+- written in C and Fortran
+- CRAN stores code for R
+- packages
+
+RStudio
+- integrated development environment
+- not necessarily to work with R
+
+Installing R: cran.rstudio.com
+
+FSB: data types.
+Instruction 1+2
+Outcome 3
+
+Instruction a <- 1+2
+
+Classes
+Numeric
+- Integer (1, 2, 3, ...)
+- Floating point (42.1)
+- Complex (real and imaginary part, e.g. 3+1i)
+
+Text
+- Character ('a', 'B', ...)
+- String
+
+Instruction a <- "b"
+Outcome new variable a
+Instruction b <- "Valencia"
+Outcome new variable b
+
+Logical
+- Boolean (True / False)
+
+Special values
+- Null: object returned when the result of a function is undefined
+- NA: not available (missing value in dataset)
+- NaN: not a number (eg. undefined mathematical operation)
+- Inf: infinity (eg. number too large)
+
+Scalar - single value of certain type
+a = 2
+a <- 2
+
+Atomic Vector
+- ordered set of values of same type; same type
+- concatenation of atomic values
+vec = c(1,2,3) 
+v.n <- vector('numeric', length=3)
+
+List - list of valies of variable type
+lst = list('a', 'b')
+
+Matrix - matrix of values same type
+"name" = matrix("values", # of rows, # of columns)
+?matrix
+
+DataFrames - collection of columns
+?data.frame
+"name" = data.frame("define column 1", ..., "define column n")
+
+Factor - list of fixed categorical values (levels)
+f = factor(x = c(1,2,1))
+
+Remember:
+use function "class" to test for variable type
+
+R is a column oriented programming language
