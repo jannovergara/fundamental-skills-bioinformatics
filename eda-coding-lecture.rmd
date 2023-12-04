@@ -1,0 +1,217 @@
+---
+title: "W2_L4_EDA Coding Lecture"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# WEEK 2 LECTURE 4.
+
+# Explorative Data Analysis.
+
+# Start
+
+## Let us prepare the environment: install
+
+```{r}
+# load packages
+# install.packages("tidyverse")
+# install.packages("ggplot2")
+```
+
+## Let us prepare the environment: require-load
+
+```{r}
+# load packages
+library(tidyverse)
+library(ggplot2)
+```
+
+## Let us load the data
+
+```{r}
+ds2 <- read.csv("data/DATA_FSB_SET_2.csv", row.names = 1)
+ds2 <- ds2[complete.cases(ds2),]
+```
+
+# First exploration.
+
+## Let's have a look at the general structure of the dataset
+
+```{r}
+head(ds2)
+```
+
+## we can get a good overview of the column-wise statistics
+
+```{r}
+summary(ds2)
+```
+
+# Visualization: scatterplot
+
+First, we need to understand the basic structure of ggplot2 comands. Let's say we want to understand the relationship between the weight of our patients and their blood LDL levels. This is how the plot is then setup.
+
+## Just set the plot dimension here.
+
+```{r}
+options(repr.plot.width = 3, repr.plot.height = 3)
+```
+
+## basic plot setup, no data shown yet!
+
+```{r}
+ggplot(ds2, aes(x=Weight, y=LDL))
+```
+
+## Adding a scatterplot shows the actual data in the figure!
+
+```{r}
+ggplot(ds2, aes(x=Weight, y=LDL)) + 
+    geom_point()
+```
+
+## Let's add a linear fit of the data to the plot,
+
+and adjust the axis limits, labels and title to make the plot better understandable.
+
+```{r}
+ggplot(ds2, aes(x=Weight, y=LDL))  + 
+    geom_point() + 
+    geom_smooth(formula = y ~ x, method="lm", se=FALSE) +
+    # axis limits
+    xlim(c(0, 350)) + 
+    ylim(c(0, 300))+
+    # and change title and axis labels
+    ggtitle("Weight vs. LDL") +
+    xlab("Body Weight") + ylab("LDL level")
+```
+
+## A good way to visualize a third aspect of the data in a scatter plot
+
+is to represent the third value as color of the points.
+
+```{r}
+options(repr.plot.width = 4.5, repr.plot.height = 3)
+
+ggplot(ds2, aes(x=Weight, y=LDL))  + 
+      geom_point(aes(col=Hospital_Visits), size=3) +
+    ggtitle("Weight vs. LDL") +
+    xlab("Body Weight") + 
+    ylab("LDL level")
+```
+
+# Visualization additional plots
+
+## Histogram: visualize the empirical distribution of a random variable.
+
+```{r}
+ggplot(ds2, aes(x = Age)) + 
+	geom_histogram(binwidth = 5) +
+	xlab("Weight") +
+	ylab("Patients")
+```
+
+## Boxplot: comparing distributions of variables
+
+```{r}
+ggplot(ds2, aes(y=Weight, fill=Color_House))  + 
+	geom_boxplot() +
+	ylab("Weight") +
+	ggtitle("Count Distribution per Sample") +
+	theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+```
+
+# Principal Component Analysis
+
+```{r}
+idx <- grep("Color_House", colnames(ds2)) 
+ds2.onlyNumerical <- ds2[,-idx]
+
+pca <- prcomp(ds2.onlyNumerical, scale = TRUE, center = TRUE)
+
+summary(pca)
+```
+
+The summary gives us a good overview over the PCA result.
+
+-   row "Proportion of Variance" corresponds to the amount of variance the component accounts for in the data. Accordingly, PC1 accounts for about 31% of the total variance in the data, while PC2 accounts for 14%!
+-   row "Cumulative Proportion" is the cumulative proportion of variance explained by the first x components. The first 5 components explain about 83% of the total variation in the dataset
+
+##Lets visualize this summary.
+
+```{r}
+# Visualize Eigenvalues 
+options(repr.plot.width = 5, repr.plot.height = 5)
+plot(pca,
+	xlab = "Dimension",
+	main = 'Scree plot')
+
+# Cumulative explained variability plot
+cp <- cumsum(pca$sdev^2 / sum(pca$sdev^2))
+plot(cp, 
+    xlab = "PC #", 
+     ylab = "Amount of explained variance", 
+     main = "Cumulative variance plot")
+
+# Visualize individual patients using only the first two components
+plot(pca$x[,1], pca$x[,2], 
+	xlab = 'PC 1', 
+	ylab = 'PC 2', 
+	main = 'PCA across Patients')
+```
+
+## Do all of the rows have the same variance independent of the mean counts?
+
+```{r}
+# Let's make a plot detailing the contributions of each variable to the first two components of our PCA
+# install.packages("factoextra")
+library("factoextra")
+options(repr.plot.width = 10, repr.plot.height = 10)
+fviz_pca_var(pca, geom = c("point", "text"))
+```
+
+# Clustering
+
+```{r}
+# contructing a distance matrix between all sample combinations
+ds2.onlyNumerical.sc <- scale(ds2.onlyNumerical, scale = TRUE, center = TRUE)
+dist.by.variable  <- dist(t(ds2.onlyNumerical.sc))
+
+# Hierarchical clustering
+dt.clust.by.var <- hclust(dist.by.variable)
+
+# Plot a dendrogram
+options(repr.plot.width = 5, repr.plot.height = 5)
+plot(dt.clust.by.var)
+```
+
+It seems, we have two groups of variables which are related to each other. This result looks familiar, as the clustering structure is similar to the relative placement of variables in the first and second PCA component plot above.
+
+## Heatmaps & Clustering
+
+Lets try to cluster our patients and visualize them as heatmap.
+
+```{r}
+# Calculated the distances and then the hierarchical clustering
+dist.by.patient <- dist(ds2.onlyNumerical.sc)
+dt.clust.by.patient <- hclust(dist.by.patient)
+
+
+options(repr.plot.width = 4, repr.plot.height = 7)
+
+# load package to make heatmaps
+## install.packages("pheatmap")
+library(pheatmap)
+
+# and finally plot the count values as heatmap
+options(repr.plot.width = 6, repr.plot.height = 15)
+pheatmap(ds2.onlyNumerical.sc,
+    show_rownames = F,
+    cluster_rows = dt.clust.by.patient,
+    cluster_cols = dt.clust.by.var)
+```

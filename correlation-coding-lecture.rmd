@@ -1,0 +1,95 @@
+---
+title: "W2_L05_Correlation Coding Lecture"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Correlation.
+
+# How to quantify similarity between variables?
+
+## Read data and explore it
+
+```{r}
+library(tidyverse, quietly=TRUE)
+ds1 <- read.csv("data/DATA_FSB_SET_1.csv", row.names = 1)
+glimpse(ds1)
+```
+
+## Visual exploration
+
+A scatterplot suggests a relationship between our variables Hours_Sun and LDL.
+
+```{r}
+ggplot(ds1, aes(x=Hours_Sun, y=LDL)) + 
+    geom_point()
+```
+
+## How do we quantify such a relationship? Covariance
+
+Â´ManualÂ´ calculation of covariance
+
+```{r}
+Hours_sun_LDL_cov <- sum((ds1$Hours_Sun - mean(ds1$Hours_Sun)) * (ds1$LDL - mean(ds1$LDL))) / (nrow(ds1) -1)
+round(Hours_sun_LDL_cov, 2)
+```
+
+## How do we quantify such a relationship? Covariance
+
+R has a built-in function for the covariance: cov
+
+```{r}
+Hours_sun_LDL_cov <- cov(ds1$Hours_Sun, ds1$LDL)
+round(Hours_sun_LDL_cov, 2)
+
+```
+
+# Computing the correlation
+
+## Manual calculation of correlation
+
+```{r}
+Hours_sun_LDL_cov <- sum((ds1$Hours_Sun - mean(ds1$Hours_Sun)) * (ds1$LDL - mean(ds1$LDL))) / (nrow(ds1) -1)
+Hours_sun_LDL_cor <- Hours_sun_LDL_cov / (sd(ds1$Hours_Sun) * sd(ds1$LDL))
+cat("Pearson correlation Hours_sun vs. LDL: ", round(Hours_sun_LDL_cor, 3), '\n')
+```
+
+## R built-in function for the correlation
+
+```{r}
+Hours_sun_LDL_cor <- cor(ds1$Hours_Sun, ds1$LDL)
+```
+
+## Statistical analysis.
+
+The alternative hypothesis is defined as the correlation being different to 0
+
+```{r}
+cor.test(ds1$Hours_Sun, ds1$LDL)
+```
+
+## Statistical analysis: alternative tests.
+
+We can specify the alternative hypothesis, e.g. that the correlation is larger than 0.
+
+```{r}
+cor.test(ds1$Hours_Sun, ds1$LDL, alternative = 'greater')
+```
+
+# Assumptions for correlation.
+
+## Gaussian/Normal distributions for each variable.
+
+```{r}
+shapiro.test(ds1$Hours_Sun)
+shapiro.test(ds1$LDL)
+```
+
+## Non-parametric correlation analysis.
+
+```{r}
+cor.test(ds1$Hours_Sun, ds1$LDL,method="spearman")
+```

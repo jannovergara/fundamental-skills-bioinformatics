@@ -1,3 +1,5 @@
+WEEK 1
+
 Programming - instruct computer to perform tasks
 Why? Because computers are fast and cheap and run 24hrs.
 Follows a pre-defined logic and syntax, highly detailed and precise
@@ -75,3 +77,119 @@ Remember:
 use function "class" to test for variable type
 
 R is a column oriented programming language
+
+FSB: control flow. If statement
+FSB: control flow. Loop
+FSB: Loading / Writing data.
+
+Load file
+- Name of the file
+- Variable to store data
+- Format
+
+Write file
+- Name of the file
+- Variable to store data
+- Format
+
+WEEK 2
+Instroduction to Module 2
+
+Logical values
+Operating with logical values
+NA
+Plots in R
+Correlation, Linear Models
+t-test, ANOVA
+Advance R
+
+Logical Values
+What is a logical value? True or False
+Using logical values in vectors?
+Operating with logical values?
+
+Jupyter Notebooks
+
+Data Quality control
+Its hard to believe, but not all datasets are perfect!
+- Missing measurements
+- Invalid data type conversion
+- Preprocessing produces invalid values
+
+R features reserved words representing different cases:
+- NA        "Not available" ...Missing value
+- NaN       "Not a number"  ...Invalid computation
+- (-)Inf    Infinite value  ...Mostly invalid computation
+- Null      Empty object
+
+is.na() / is.nan() / is.finite / is.null
+
+Missing values
+Values that are not feasible
+Outliers
+
+Explorative Data Analysis (EDA)
+- statistical analysis
+- hypothesis
+
+Visualization
+William Playfair
+- Scottish engineer and a political economist
+- founder of graphical methods of statistics
+- line, area, pie, bar charts
+- time series chart of England explaining the trade balance of England over time
+
+Charles Joseph Minard
+- information graphics
+- summarizes Paris pavement maintenance over two centuries
+
+Florence Nightingale
+- social reformer
+- founder of modern nursing
+- polar area diagram
+- seasonal sources of patient mortality
+
+John Tukey
+- mathematician and statistician
+- boxplot
+- 1977 book
+
+PCA
+Clustering
+Correlation Analysis
+
+t-Test and ANOVA
+William Silly - student t-test
+
+t-test assumptions
+1. Both populations should follow a normal distribution
+2. Same variance in both populations - Levene test
+3. Independence
+
+Examples for not independent
+- follow up samples from same patients over time
+
+ANOVA (ANalysis Of VAriance):
+R Fisher
+Null hypothesis:    "all means are the same"
+- A general statement that states that there is no relationship between two measure phenomena or no association among groups
+Alternative:        "means are not equal"
+- Contrary to the NULL hypothesis, it state whenever something is happening, a new theory is preferred instead of an old one
+
+P Value
+- The P value is the probability of finding the observed, or more extreme, results when the null hypothesis of a study question is true
+
+Alpha Value
+- The alpha value is a criterion for determining whether a test statistic is statistically significant
+
+F Statistics
+- An F Statistic is a value you get when you run an ANOVA test to find out if the means between two population are sinificantly different
+
+Tukeys HSD (Honest significant difference) test
+
+Consider the simplest case:
+- three groups
+- differences between them,
+- within every population all equal
+
+There is always random variation in a population

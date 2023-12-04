@@ -1,0 +1,132 @@
+---
+title: "W2_L06_Linear models Coding Lecture"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Linear models.
+
+# Some overview
+
+Let's fit a model to our observed relationship between Weight and the
+LDL concentration and inspect the result.
+
+## General format:
+
+lm(, )
+
+lm(Response \~ Predictor, data)
+
+## Assumptions to allow fitting a linear model:
+
+-   Dependency between data is linear
+-   Mean of residuals is zero
+-   Homoscedasticity of residuals or equal variance
+-   No autocorrelation of residuals
+-   The X variables and residuals are uncorrelated
+-   The number of observations must be greater than number of Xs
+-   The variability in X values is positive
+-   The regression model is correctly specified
+-   No perfect multicollinearity
+-   Normality of residuals
+
+# Linear model
+
+```{r}
+library(tidyverse)
+```
+
+## First load our trusty dataset 1
+
+```{r}
+ds1 <- read.csv("data/DATA_FSB_SET_1.csv", row.names = 1)
+```
+
+## Fit a linear model
+
+```{r}
+wt.vs.ldl.lm <- lm(Weight ~ LDL, ds1)
+```
+
+## Print the summary of the model
+
+```{r}
+summary(wt.vs.ldl.lm)
+```
+
+## What we should be looking into...
+
+-   The estimated intercept and slope are -156.8 and 1.9.
+
+-   The result looks good, the adjusted R-square value of 0.9992 is
+    close to 1.
+
+-   The definition of R-squared is the percentage of the response
+    variable variation that is explained by a linear model.
+
+    ```         
+    R-squared = Explained variation / Total variation 
+    R-squared is always between 0 and 1.
+    ```
+
+## Access the values
+
+```{r}
+s <- summary(wt.vs.ldl.lm)
+s$r.squared
+```
+
+# Evaluate the linear model
+
+## Let's inspect the result visually.
+
+First with a simple plot of our two variables, and the linear fit.
+
+```{r}
+plt <- ds1 %>% 
+  ggplot(aes(x = LDL, y = Weight)) + 
+  geom_point() +
+  xlab("LDL") +
+  ylab("Weight") +
+geom_smooth(method='lm', se = FALSE)  
+plt
+```
+
+As not all data points are perfectly captured by the linear model, we
+should inspect the residuals with respect to the fitted values.
+
+## Distribution of the residuals
+
+```{r}
+mean(wt.vs.ldl.lm$residuals)
+
+hist(wt.vs.ldl.lm$residuals)
+```
+
+## QQ-plot
+
+Comparing the residual distribution to a theoretical normal distribution
+in a quantile-quantile-plot (QQ-plot).
+
+```{r}
+plot(wt.vs.ldl.lm, 2)
+```
+
+## Fitted value vs Residuals
+
+Another intuitive way is to examine the relationship between the fitted
+value and the corresponding residual. We see that the model
+systematically deviates from the data, overestimating the weight for
+very low and high LDL values, and slightly underestimates it for
+intermediate values.
+
+```{r}
+options(repr.plot.width = 6, repr.plot.height = 6)
+plot(wt.vs.ldl.lm, 1)
+```

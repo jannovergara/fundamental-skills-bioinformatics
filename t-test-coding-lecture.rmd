@@ -1,0 +1,208 @@
+---
+title: "W2_L07_t-test_ANOVA Coding Lecture"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# t-test
+
+## Aim
+
+Statistical test to compare the means of two populations.
+
+## Assumptions
+
+-   The values from each group follow a normal distribution.
+-   Homogeneous, or equal, variance exists when the standard deviations
+    of samples are approximately equal.
+-   Scale of measurement applied to the data collected follows a
+    continuous or ordinal scale.
+-   Data is collected from a representative, randomly selected portion
+    of the total population.
+
+## Load data
+
+```{r}
+# Use dataset 3
+# Consider that patients from earth have a different LDL level than patients from venus
+ds3 <- read.csv("data/DATA_FSB_SET_3.csv", row.names = 1)
+summary(ds3)
+# NO NAs...
+```
+
+```{r}
+# install.packages("tidyverse")
+# install.packages("corrr")
+library(tidyverse)
+library(corrr)
+
+ds3_corr <- ds3 %>% 
+  select(-Planet) %>% 
+  select(-Planet2) %>% 
+  cor(method = "pearson")
+
+# plot sample correlation structure as heatmap
+rplot(ds3_corr) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+# Visual inspection with box plots shows some difference between the planets
+ds3.df <- ds3 %>%
+mutate(Planet = factor(Planet)) %>%
+mutate(Planet2 = factor(Planet2))
+
+# Let's have a look at the resulting dataframe
+glimpse(ds3.df)
+```
+
+```{r}
+ds3.df %>%
+group_by(Planet) %>%
+summarise(
+count_planet = n(),
+mean_LDL = mean(LDL_levels, na.rm = TRUE),
+sd_LDL = sd(LDL_levels, na.rm = TRUE)
+)
+
+plt <- ggplot(ds3.df, aes(x = Planet, y = LDL_levels, fill = Planet)) +
+geom_boxplot() +
+theme_classic()
+plt
+```
+
+## Analyze assumptions
+
+Before we can employ a t-Test, we have to assess whether the fundamental
+assumptions hold.
+
+### Asumption 1: each group follows a normal distribution.
+
+A histogram provides a useful visualization. Let's look at LDL level
+histogram:
+
+```{r}
+# focus on Venus, since we can hypothesize that there is a difference between the planets
+planet <- 'Venus'
+
+# ggplot2 allows to easily fit a normal distribution on our data for a visual assessment
+plt <- ds3 %>% 
+filter(Planet == planet) %>% 
+    ggplot() + 
+    geom_histogram(aes(x = LDL_levels, y = ..density.., fill = Planet), binwidth = 5) +
+    xlab("LDL [mg/dL]") +
+    stat_function(fun = dnorm, 
+                  args = list(mean = mean(ds3$LDL_levels[ds3$Planet == planet]), 
+                              sd = sd(ds3$LDL_levels[ds3$Planet == planet]))) +
+scale_fill_manual(values=c("#E69F00", "#56B4E9","#999999"))
+plt
+```
+
+But visual assessment can be deceiving. A more precise way is a
+quantile-quantile plot:
+
+```{r}
+options(repr.plot.width = 7, repr.plot.height = 4)
+par(mfrow = c(1,2), bg = 'white')
+# For Earth
+qqnorm(ds3$LDL_levels[ds3$Planet == 'Earth'], pch = 1, frame = FALSE, main = 'Earth')
+qqline(ds3$LDL_levels[ds3$Planet == 'Earth'], col = "steelblue", lwd = 2)
+
+# For Venus
+qqnorm(ds3$LDL_levels[ds3$Planet == 'Venus'], pch = 1, frame = FALSE, main = 'Venus')
+qqline(ds3$LDL_levels[ds3$Planet == 'Venus'], col = "steelblue", lwd = 2)
+```
+
+```{r}
+shapiro.test(ds3$LDL_levels[ds3$Planet == 'Earth'])
+shapiro.test(ds3$LDL_levels[ds3$Planet == 'Venus'])
+```
+
+### Asumption 2: each group has the same variance.
+
+The Bartlett test can be used to determine if the variance is similar
+between two samples.
+
+```{r}
+ldl_vs_planet.varTest <- bartlett.test(LDL_levels ~ Planet, data = ds3)
+ldl_vs_planet.varTest
+```
+
+### Asumption 3: Independence
+
+The third assumption is independence of samples from each other. This
+assumption needs to be investigated in the context of the experimental
+design. Let us assume, individuals are coming from different families,
+and there is no bias towards selection (e.g. not a bias towards
+younger).
+
+## Running the t-test
+
+```{r}
+# first without variance-equality option
+ldl.vs.planet.ttest <-  t.test(LDL_levels ~ Planet, data=ds3)
+ldl.vs.planet.ttest
+# the actual p-value
+signif(ldl.vs.planet.ttest$p.value, digits=3)
+```
+
+```{r}
+# second with variance-equality option, since we tested that
+ldl.vs.planet.ttest.2 <-  t.test(LDL_levels ~ Planet, data=ds3, var.equal = TRUE)
+ldl.vs.planet.ttest.2
+# the actual p-value
+signif(ldl.vs.planet.ttest.2$p.value, digits=3)
+```
+
+As a result, considering that we set a threshold for significance at
+0.01, we can reject the null hypothesis, and we will consider the two
+populations to have a different mean.
+
+# ANOVA
+
+Let us review the comparisons between means when instead of two groups,
+we have three groups.
+
+## Comparing the means.
+
+```{r}
+ds3 %>%
+group_by(Planet2) %>%
+summarise(
+count_planets = n(),
+mean_time = mean(LDL_levels, na.rm = TRUE),
+sd_time = sd(LDL_levels, na.rm = TRUE)
+)
+```
+
+## Comparing the empirical distributions between the planets using boxplots
+
+```{r}
+#Lets look at the 
+plt <- ggplot(ds3.df, aes(x = Planet2, y = LDL_levels, fill = Planet2)) +
+geom_boxplot() +
+theme_classic() +
+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+plt
+```
+
+## Running the ANOVA test
+
+```{r}
+# Now for the systematic analysis using a one way ANOVA
+anova_one_way <- aov(Exercise ~ Planet2, data = ds3)
+summary(anova_one_way)
+```
+
+## Post-hoc analysis
+
+```{r}
+TukeyHSD(anova_one_way, ordered = TRUE)
+plot(TukeyHSD(anova_one_way, ordered = TRUE))
+```

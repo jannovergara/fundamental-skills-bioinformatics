@@ -1,0 +1,219 @@
+---
+title: "W2_L02_Logical Vectors Coding Lecture"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
+# Note that the `echo = FALSE` parameter was added to the code chunk 
+# to prevent printing of the R code that generated the plot.
+```
+
+# WEEK 2 LECTURE 2.
+
+# Operations with logical vectors
+
+## Logical vectors contain only boolean values
+
+{TRUE, FALSE}
+
+## Boolean values can be abbreviated
+
+TRUE = T FALSE = F
+
+## Boolean values are the result of a range of logical operators:
+
+== equal != not equal \< less than \<= less than or equal \> greater
+than \>= greater than or equal & and \| or ! not %in% contained in set
+
+## Examples
+
+```{r}
+1 == 2
+1 < 2
+!TRUE
+1 %in% c(1,2,3)
+```
+
+## Examples with vectors
+
+```{r}
+v <- 1:10
+v > 5
+v >= 6
+```
+
+# Indexing a data structure
+
+## Logical vectors can be used to select certain parts from data structures like data frames or matrices.
+
+```{r}
+mat <- matrix(data = rnorm(40), nrow = 4, ncol = 10)
+dim(mat)
+
+idx <- c(TRUE, TRUE, TRUE, FALSE)
+
+mat2 <- mat[idx,]
+dim(mat2)
+```
+
+## Working with a real data-set
+
+```{r}
+# Set working directory 
+setwd(".")
+
+# Load dataset
+ds1 <- read.csv("data/DATA_FSB_SET_1.csv", row.names = 1)
+
+# Check its dimensions. Check out the documentation with "?dim"
+dim(ds1)
+```
+
+```{r}
+# Lets have a look to the data
+head(ds1)
+```
+
+```{r}
+# Access third, fifth, and 99th row directly.
+ds1[c(3,5,99), ]
+```
+
+## Aim: identify samples of interest.
+
+### But we can use our logical operators to make a selection index.
+
+### question 1: which patients are more than 100 kg in weight?
+
+### question 2: store that information into a vector.
+
+### question 3: explore the results.
+
+```{r}
+
+# identify and store
+ds1$Weight > 100
+idx <- ds1$Weight > 100
+
+# explore the results.
+table(idx)
+sum(idx)
+```
+
+## Aim: select samples of interest.
+
+### remember the code
+
+```{r}
+rownames(ds1)
+ds1$Weight > 100
+```
+
+### Lets use the vector to filter the rownames of interest.
+
+```{r}
+rownames(ds1)[ ds1$Weight > 100 ]
+```
+
+## Aim: how many patients are experiencing in average exactly 10 hours of sun per day?
+
+```{r}
+table(ds1$Hours_Sun == 10)
+```
+
+## Aim: compare two columns
+
+```{r}
+table(ds1$Hours_Sun > ds1$Sleep_Hours)
+```
+
+## Or how many patients have been in the hospital from 2 to 4 times?
+
+```{r}
+table(ds1$Hospital_Visits %in% 2:4)
+```
+
+# Combinations of logical operations
+
+But we can also ask more complex questions, using boolean algebra. This
+allows chaining multiple logical operations. This is done by the
+operators "and" (&) and "or" (\|), which take two boolean values.
+
+TRUE & TRUE TRUE \| FALSE
+
+## Map of combinations
+
+The results of all possible combinations of boolean value and operator
+is shown in this truth table:
+
+| X \| Y \| "X & Y" \| "X \| Y" |
+|-------------------------------|
+| T \| F \| F \| T              |
+| T \| F \| F \| T              |
+| T \| T \| T \| T              |
+| F \| F \| F \| F              |
+
+## Making use of the combinations.
+
+Armed with that logic, we can connect conditions, like rewriting the
+previous range filter.
+
+```{r}
+table(ds1$Hospital_Visits >= 2 & ds1$Hospital_Visits <= 4)
+```
+
+Or connect conditions on multiple columns, to e.g. find genes that have
+large count numbers in both samples.
+
+```{r}
+table(ds1$Hospital_Visits >= 4 & ds1$Weight > 100)
+```
+
+These conditions can be arbitrarily complex, such as finding patients
+which are more than 100 kg in weight with more than 3 hospitalizations
+or are older than 80 years of age.
+
+```{r}
+table((ds1$Hospital_Visits >= 4 & ds1$Weight > 100) | ds1$Age >= 80)
+```
+
+# Application of logical vectors to filter data
+
+A simple but very powerful of logical vectors is filtering tables. Lets
+follow an example where we will filter unrealistic values.
+
+##Lets start with a plot. Which we will see how to do more of those in
+the coming lectures. A histogram allows a simple yet powerful data
+exploration
+
+```{r}
+hist(ds1$Hours_Sun,breaks=10)
+```
+
+After we observed the plot, we identified several individuals with very
+few hours of sun. Those values are to be investigated. Maybe they are
+living in countries with very few hours of sun, or they work mainly
+indoors or there are other possible reasons. Let us consider for this
+exercise that those are wrongly measured values, and - as a result - we
+decide to filter the values
+
+## First we need to identify those individuals. Let us consider that less than 3 hours is not a realistic value.
+
+```{r}
+ds1$Hours_Sun < 3
+ind_wrong_values <- ds1$Hours_Sun < 3
+```
+
+## In a second step we, we are making use of the logical vector to filter
+
+```{r}
+ds1_filt <- ds1[!ind_wrong_values,]
+dim(ds1_filt)
+```
+
+We could decide to extend this filtering to additional variables. For
+instance, to filter outliers.

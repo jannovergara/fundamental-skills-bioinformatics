@@ -1,0 +1,72 @@
+---
+title: "W2_L03_QC Coding Lecture"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# WEEK 2 LECTURE 3.
+
+# Quality Control
+
+Before any real analysis, quality control has to be performed to make sure the entire dataset looks like we think it does. There are additional logical functions that are very useful to perform QC.
+
+## Missing Values
+
+Which values in x are missing? "NA" is a reserved word representing a logical constant that is used in place of missing values.
+
+### Investigate missing values
+
+```{r}
+is.na(c(1,2,NA))
+```
+
+### Investigate if the values are numbers
+
+"Inf" and "-Inf" are positive and negative infinity. "NaN" represents "Not a Number"
+
+```{r}
+is.finite(c(1,2,NaN,NA))
+```
+
+### Investigate if there are duplicated values?
+
+```{r}
+duplicated(c(1,1,2,3))
+```
+
+## Example with real data
+
+Lets go back to our dataset 1 and try it out.
+
+```{r}
+setwd(".")
+ds1 <- read.csv("data/DATA_FSB_SET_1.csv", row.names = 1)
+```
+
+and create an index pointing out individuals of age 105 years
+
+```{r}
+idx <- which(ds1$Age == 105)
+ds1[idx, ]
+```
+
+we can iterate over all columns of our dataset and test if there are any NaN contained
+
+```{r}
+for(i in 1:ncol(ds1)) 
+{
+    if(any(is.nan(ds1[,i])))
+    {
+        cat('There are ' , length(is.nan(ds1[,i])), 'NaNs in column ', colnames(ds1)[i], '\n')
+    } else
+    {
+        cat('There are no NaNs in column ', colnames(ds1)[i], '\n')
+    }
+
+}
+```
+
+Very good, there are no NaN values in all columns of our dataset.

@@ -1,0 +1,121 @@
+---
+title: "FSiB - Introduction to R"
+author: "Robert Lehmann (modified by David Gomez-Cabrero)"
+date: "2022"
+output: html_document
+---
+
+# Week 1
+
+## \# Control Flow in R
+
+## Basic if statement
+
+```{r}
+x1 <- 11
+
+# Basic syntax
+
+if (x1 < 10) {
+    print("A")
+} 
+
+# Basic syntax: else
+
+if (x1 < 10) {
+    print("A")
+} else {
+  print("B")
+}
+
+# Basic syntax: storing the value
+
+x2 <- if(x1 < 20) 'B' else 'C'
+x2
+
+#x2 <- if(x1 < 20) {'B'} else {'C'}
+#x2
+```
+
+## Choices with if-else statements
+
+```{r}
+x1 <- 11
+
+# Nested version with arbitrarily many options
+if (x1 < 10) {
+    "A"
+} else if (x1 < 20) {
+    "B"
+} else {
+    "C"
+}
+
+# Storing the return value in a variable
+x2 <- if(x1 < 20) 'B' else 'C'
+x2
+
+
+# Evaluating entire vector instead of a scalar
+v1 <- seq(1,10)
+ans <- ifelse(v1 / 2 == 4, "Here", "Nope")
+ans
+```
+
+## Switch-statements
+
+```{r}
+
+colorMapper <- function(x) {
+  switch(x,
+         red = "#FF0000",
+         green = "#00FF00",
+         blue = "#0000FF",
+         stop("Invalid color name")
+  )
+  }
+
+colorMapper('red')
+colorMapper('tree')
+
+```
+
+## For-loops
+
+```{r}
+
+# Create dummy matrix
+mat <- matrix(
+  data = rnorm(20), 
+  nrow = 5, 
+  ncol = 4,
+  dimnames = list(NULL, c('col1', 'col2', 'col3', 'col4')))
+
+# Initialize result vector. We know how large the result is.
+means <- vector("list", ncol(mat))
+
+# Iterate over matrix columns and populate result
+for (i in 1:ncol(mat)) {
+  means[[i]] <- mean(mat[,i])
+}
+
+```
+
+## While-loops
+
+```{r}
+
+# Initialize a vector of 0
+items <- vector('numeric', length = 3)
+
+# Add a vector of random numbers to the initial vector, until the total sum is larger 10
+# the total number of iterations is not known beforehand
+
+iter <- 0
+while(sum(items) < 10) {
+  iter <- iter + 1
+  items <- items + rnorm(length(items))
+}
+iter
+items
+```
