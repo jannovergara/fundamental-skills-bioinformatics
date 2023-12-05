@@ -93,7 +93,7 @@ Write file
 - Format
 
 WEEK 2
-Instroduction to Module 2
+Introduction to Module 2
 
 Logical values
 Operating with logical values
@@ -193,3 +193,35 @@ Consider the simplest case:
 - within every population all equal
 
 There is always random variation in a population
+
+Data Analysis: hands on
+What do you need to do?
+Step 1. Load / read the data.
+Step 2. QC and first EDA.
+Step 3. Pre-process the data?
+Step 4. Differential expression per gene
+Step 5. Visualize the result
+Step 6. Summary of the outcomes
+
+R packages
+- Core functions in R
+- Additional resources (packages)
+-- Bundles together
+--- code
+--- data
+--- documentation
+--- Tests
+
+Easy to share/access:
+- CRAN - network of FTP and webserver
+- Bioconductor - high throughput bioassays for bioinformatics
+- Github
+
+install - from online to local
+load - activate in working environment
+- library
+- require
+
+WEEK 3
+Introduction to Module
+Python

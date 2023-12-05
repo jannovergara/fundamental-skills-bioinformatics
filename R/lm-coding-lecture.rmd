@@ -45,7 +45,7 @@ library(tidyverse)
 ## First load our trusty dataset 1
 
 ```{r}
-ds1 <- read.csv("data/DATA_FSB_SET_1.csv", row.names = 1)
+ds1 <- read.csv("r-data/DATA_FSB_SET_1.csv", row.names = 1)
 ```
 
 ## Fit a linear model

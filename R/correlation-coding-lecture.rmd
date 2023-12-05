@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(tidyverse, quietly=TRUE)
-ds1 <- read.csv("data/DATA_FSB_SET_1.csv", row.names = 1)
+ds1 <- read.csv("r-data/DATA_FSB_SET_1.csv", row.names = 1)
 glimpse(ds1)
 ```
 

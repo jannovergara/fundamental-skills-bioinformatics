@@ -22,7 +22,7 @@ setwd("~/Coursera_FSB/Module1_dgc/CODING_WEEK_1")
 
 #"~/Coursera_FSB/Module1_dgc/CODING_WEEK_1/DATA/DATA_FSB_SET_1.csv"
 
-data <- read.table("DATA/DATA_FSB_SET_1.csv", 
+data <- read.table("r-data/DATA_FSB_SET_1.csv", 
                    header = TRUE,
                    row.names = 1,
                    sep=',',

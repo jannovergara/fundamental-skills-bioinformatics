@@ -1,0 +1,25 @@
+Python and R
+Python ecosystem
+Guido van Rossum
+
+Python installation and environments
+Jupyter Lab
+
+Python native data structures
+- The two languages are interpreted - no need to compile before executing the code
+- Dynamic typing - no need to declare in advance the type (eg. int, boolean, etc) of a variable
+
+Relevant differences
+- built-in data types are different
+-- vectors and arrays are readily available in Relevant
+-- tuples and dictionaries are present in Python
+
+Loops, if statement, function declarations: different syntax
+
+Lists: [3. True, "abc", 3] - ordered collection of values
+
+Tuples: (3, True, "abc", 3) - similar to lists but once created cannot be modified
+
+Sets: {3, True, "abc"} - collection of unique elements
+
+Dictionaries: {"Key1":3, "OneMoreKey":True, "Key3":"abc"} - collection of unique keys each associated with a value

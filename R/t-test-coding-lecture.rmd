@@ -31,7 +31,7 @@ Statistical test to compare the means of two populations.
 ```{r}
 # Use dataset 3
 # Consider that patients from earth have a different LDL level than patients from venus
-ds3 <- read.csv("data/DATA_FSB_SET_3.csv", row.names = 1)
+ds3 <- read.csv("r-data/DATA_FSB_SET_3.csv", row.names = 1)
 summary(ds3)
 # NO NAs...
 ```
