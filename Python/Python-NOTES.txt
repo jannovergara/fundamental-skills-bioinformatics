@@ -23,3 +23,32 @@ Tuples: (3, True, "abc", 3) - similar to lists but once created cannot be modifi
 Sets: {3, True, "abc"} - collection of unique elements
 
 Dictionaries: {"Key1":3, "OneMoreKey":True, "Key3":"abc"} - collection of unique keys each associated with a value
+
+Python Modules
+- scientific computation capabilities
+- data analysis functions
+- web development tools
+
+Modules are .py files containing multiple functions eg random.py
+Packages / libraries are collections of modules coherently organized (matplotlib)
+Frameworks offer a complete programming ecosystem for large scale project eg Django
+
+NumPy Packages
+R natively supports vectors, matrices and multi-dimensional arrays
+Arithmetic operators on vectors are executed in a scalar way
+Data structures purposedly devised for statistical analysis eg data frames
+
+NumPy
+- NumPy allows to define arrays
+- NumPy arrays can be multiplied, summed, etc., as mathematical vector / matrices
+- NumPy provides a number of functions for mathematical operations eg correlations
+
+The Pandas Package
+R
+- data frames allow to intuitively represent and manipulate tabular data
+- data frames can also be used in Python thanks to the pandas Package
+
+Pandas
+- ways for transforming and manipulating your data
+- functions for reading and writing data from/to files
+- visualization and data exploration functionalities
