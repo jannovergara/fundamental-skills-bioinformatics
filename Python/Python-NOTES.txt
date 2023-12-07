@@ -52,3 +52,24 @@ Pandas
 - ways for transforming and manipulating your data
 - functions for reading and writing data from/to files
 - visualization and data exploration functionalities
+
+Week 4
+Overview
+
+The main objective is to work on a real-case scenario and through this process to identify:
+- what are the logical steps that should be followed?
+- what are the difficulties that should be expected?
+
+Get experience with some widely-used packages for the analysis of biological data
+- Limma, DESeq2 and edgeR in R
+- AnnData, scanpy in Python
+
+Case study
+Single-cell transcriptomics identifies an effectorness gradient shaping the response of CD3+ T cells to cytokines
+Cano-Gomez et al., Nat Commun 11, 1801 (2020)
+
+Naive CD4+ T-cells
+Memory CD4+ T-cells
+
+Replicate some analysis on bulk RNA sequences
+Analysis on single cell

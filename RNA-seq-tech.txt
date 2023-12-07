@@ -1,0 +1,41 @@
+RNA-seq technology and data normalisation
+
+Basics of RNA sequencing
+Wetlab - biological sample is processed in order to extract the mRNA from the cells. This RNA is then prepared in libraries which means segmenting the RNA molecules into smaller fragments and these fragment are then processed to sequences to get the nucleotides of each sequence
+In silico - data analysis
+
+Reads - short nucleotides sequences
+Transcriptome
+
+Principal Component Analysis
+- assume normality or gaussian
+- apply variant stabilization transformation
+- find a rotation that spreads the points far away from each other as much as possible, rather than keeping them clumped together and hidden from each other.
+
+RNA-seq: differential expression analysis
+Comparison of mean values between groups: t-test
+- the t-test assumes normality
+- RNA-seq data violate this assumption
+- RNA-seq distribution closer to a negative binomial
+
+Additional issue:
+- estimating alpha is not trivial especially for low sample sizes
+
+Bulk vs Single-Cell RNA-seq
+- in Bulk RNA-seq, we generate the samples or profiles by pooling together the mRNA of several cells. this means that the expression levels of each sample is the average of expression levels of all the cells
+- in Single Cell RNA-seq, each cell is profile in isolation
+
+Cell type identification
+- naive
+- memory
+
+Q: Can the absence of differentially expressed genes be due to the presence of multiple cell types?
+
+Representing scRNA-seq in Python
+
+Structure of AnnData object
+X: contains te gene expression values; gene expression matrix
+var: data frame with information of genes
+obs: data frame with information on cells
+obsm: multivariate information on observations
+obsp: pairwise information on observations
