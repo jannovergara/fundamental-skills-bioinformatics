@@ -39,3 +39,43 @@ var: data frame with information of genes
 obs: data frame with information on cells
 obsm: multivariate information on observations
 obsp: pairwise information on observations
+
+scRNA-seq pre-processing
+
+Raw counts
+Normalization
+Log-transformation
+Regressing out-confounders
+Scaling
+
+Multidimensional scaling: UMAP
+
+PCA - not ideal for scRNA
+
+MDS oepration
+UMAP is the de facto visualization standard for single cell data
+
+1. Estimate distance between obkects
+2. Projection in a lower space
+
+Cell type identification
+1. Clustering
+2. Markers identification
+3. Comparison with known cell markers
+
+BioAI - a-birds-eye-view
+
+Skills and Toolbox. What's next?
+A brief history (1990-2020)
+
+BioAI - recent developments
+1. Data explosion - sequencing, Genomics (single-cell, multi-modal, spatial), Molecular/clinical imaging 2014, 2015, 2018
+2. Machine learning - current "new" wave since 2012
+3. Bioinformatics / Computational biology pipelines increasingly becoming "automated" (end-to-end)
+4. Advances in Computer Vision
+- technique transfer - reformat "your" problem into an image representation
+- direct application to images in Life Sciences
+5. Medicine increasingly embracing these developments
+6. Untapped, emerging opportunities across LifeSciences beyond the BioMedical Domain (plants, marine, ...)
+
+Opportunities and Challenges
